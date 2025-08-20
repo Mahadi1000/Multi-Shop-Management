@@ -90,59 +90,71 @@ function DashboardContent() {
               </h1>
             </div>
 
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  className="relative h-10 w-10 rounded-full"
-                >
-                  <Avatar className="h-10 w-10">
-                    <AvatarFallback className="bg-primary text-primary-foreground">
-                      {user.username.charAt(0).toUpperCase()}
-                    </AvatarFallback>
-                  </Avatar>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-80" align="end" forceMount>
-                <DropdownMenuLabel className="font-normal">
-                  <div className="flex flex-col space-y-1">
-                    <p className="text-sm font-medium leading-none">
-                      {user.username}
-                    </p>
-                    <p className="text-xs leading-none text-muted-foreground">
-                      {user.shops.length} shop
-                      {user.shops.length !== 1 ? "s" : ""} registered
-                    </p>
-                  </div>
-                </DropdownMenuLabel>
-                <DropdownMenuSeparator />
+            <div className="flex items-center space-x-4">
+              {/* Logout Button */}
+              <Button
+                variant="outline"
+                onClick={() => setShowLogoutDialog(true)}
+                className="text-destructive border-destructive hover:bg-destructive hover:text-destructive-foreground"
+              >
+                Logout
+              </Button>
 
-                <DropdownMenuLabel className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                  Your Shops
-                </DropdownMenuLabel>
-
-                {user.shops.map((shop) => (
-                  <DropdownMenuItem
-                    key={shop.id}
-                    className="cursor-pointer"
-                    onClick={() => handleShopClick(shop.name)}
+              {/* User Profile Dropdown */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    className="relative h-10 w-10 rounded-full"
                   >
-                    <div className="flex items-center space-x-2">
-                      <div className="w-2 h-2 bg-primary rounded-full"></div>
-                      <span>{shop.name}</span>
+                    <Avatar className="h-10 w-10">
+                      <AvatarFallback className="bg-primary text-primary-foreground">
+                        {user.username.charAt(0).toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-80" align="end" forceMount>
+                  <DropdownMenuLabel className="font-normal">
+                    <div className="flex flex-col space-y-1">
+                      <p className="text-sm font-medium leading-none">
+                        {user.username}
+                      </p>
+                      <p className="text-xs leading-none text-muted-foreground">
+                        {user.shops.length} shop
+                        {user.shops.length !== 1 ? "s" : ""} registered
+                      </p>
                     </div>
-                  </DropdownMenuItem>
-                ))}
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
 
-                <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  className="cursor-pointer text-destructive focus:text-destructive"
-                  onClick={() => setShowLogoutDialog(true)}
-                >
-                  Logout
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+                  <DropdownMenuLabel className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                    Your Shops
+                  </DropdownMenuLabel>
+
+                  {user.shops.map((shop) => (
+                    <DropdownMenuItem
+                      key={shop.id}
+                      className="cursor-pointer"
+                      onClick={() => handleShopClick(shop.name)}
+                    >
+                      <div className="flex items-center space-x-2">
+                        <div className="w-2 h-2 bg-primary rounded-full"></div>
+                        <span>{shop.name}</span>
+                      </div>
+                    </DropdownMenuItem>
+                  ))}
+
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    className="cursor-pointer text-destructive focus:text-destructive"
+                    onClick={() => setShowLogoutDialog(true)}
+                  >
+                    Logout
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
           </div>
         </div>
       </header>
@@ -196,22 +208,38 @@ function DashboardContent() {
             <CardHeader>
               <CardTitle>Account Stats</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-2">
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Total Shops:</span>
-                <span className="font-semibold">{user.shops.length}</span>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Total Shops:</span>
+                  <span className="font-semibold">{user.shops.length}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">
+                    Account Created:
+                  </span>
+                  <span className="font-semibold text-xs">
+                    {new Date(user.createdAt).toLocaleDateString()}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">User ID:</span>
+                  <span className="font-semibold text-xs">
+                    {user.id.slice(0, 8)}...
+                  </span>
+                </div>
               </div>
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Account Created:</span>
-                <span className="font-semibold text-xs">
-                  {new Date(user.createdAt).toLocaleDateString()}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">User ID:</span>
-                <span className="font-semibold text-xs">
-                  {user.id.slice(0, 8)}...
-                </span>
+
+              {/* Quick Logout Button */}
+              <div className="pt-2 border-t">
+                <Button
+                  variant="destructive"
+                  onClick={() => setShowLogoutDialog(true)}
+                  className="w-full"
+                  size="sm"
+                >
+                  Logout from Account
+                </Button>
               </div>
             </CardContent>
           </Card>
@@ -224,8 +252,16 @@ function DashboardContent() {
           <AlertDialogHeader>
             <AlertDialogTitle>Confirm Logout</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to logout? You will need to sign in again to
-              access your dashboard.
+              Are you sure you want to logout from your account?
+              <br />
+              <br />
+              You will be signed out from:
+              <br />
+              • Main dashboard
+              <br />• All shop subdomains ({user?.shops.length} shops)
+              <br />
+              <br />
+              You'll need to sign in again to access your account.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -237,7 +273,7 @@ function DashboardContent() {
               }}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
-              Logout
+              Yes, Logout
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
