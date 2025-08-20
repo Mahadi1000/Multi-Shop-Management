@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Token Bridge</title>
+  </head>
+  <body>
+    <script>
+      // This page helps share authentication tokens across subdomains
+      window.addEventListener("message", function (event) {
+        // Only accept messages from our subdomains
+        if (!event.origin.includes("localhost")) {
+          return;
+        }
+
+        if (event.data.type === "GET_TOKEN") {
+          console.log(
+            "🔗 Token bridge: Received token request from",
+            event.origin
+          );
+
+          // Get token from localStorage
+          const token = localStorage.getItem("authToken");
+
+          console.log(
+            "🔗 Token bridge: Sending token response:",
+            token ? "Found" : "Not found"
+          );
+
+          // Send token back to requesting domain
+          event.source.postMessage(
+            {
+              type: "TOKEN_RESPONSE",
+              token: token,
+            },
+            event.origin
+          );
+        }
+      });
+
+      console.log(
+        "🔗 Token bridge: Ready to handle cross-domain token requests"
+      );
+    </script>
+  </body>
+</html>
